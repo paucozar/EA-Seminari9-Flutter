@@ -7,11 +7,7 @@ class LayoutWrapper extends StatelessWidget {
   final Widget child;
   final String title;
 
-  const LayoutWrapper({
-    super.key,
-    required this.child,
-    required this.title,
-  });
+  const LayoutWrapper({super.key, required this.child, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -51,31 +47,16 @@ class LayoutWrapper extends StatelessWidget {
               ),
             ),
           ),
+          _buildNavItem(context, 'Home', Icons.home, '/'),
+          _buildNavItem(context, 'Usuaris', Icons.info_outline, '/details'),
+          _buildNavItem(context, 'Crear usuari', Icons.person_add, '/editar'),
           _buildNavItem(
-            context, 
-            'Home', 
-            Icons.home, 
-            '/'),
-          _buildNavItem(
-            context, 
-            'Usuaris', 
-            Icons.info_outline, 
-            '/details'),
-          _buildNavItem(
-            context, 
-            'Crear usuari', 
-            Icons.person_add, 
-            '/editar'),
-          _buildNavItem(
-            context, 
-            'Esborrar usuari', 
-            Icons.delete_outline, 
-            '/borrar'),
-          _buildNavItem(
-            context, 
-            'Perfil', 
-            Icons.account_circle, 
-            '/profile'),
+            context,
+            'Esborrar usuari',
+            Icons.delete_outline,
+            '/borrar',
+          ),
+          _buildNavItem(context, 'Perfil', Icons.account_circle, '/profile'),
           const Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -102,30 +83,37 @@ class LayoutWrapper extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, String title, IconData icon, String route) {
+  Widget _buildNavItem(
+    BuildContext context,
+    String title,
+    IconData icon,
+    String route,
+  ) {
     final bool isSelected = GoRouterState.of(context).uri.toString() == route;
-    
+
     return ListTile(
       leading: Icon(
-        icon, 
-        color: isSelected 
-            ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.onSurface,
+        icon,
+        color:
+            isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.onSurface,
       ),
       title: Text(
         title,
         style: TextStyle(
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected 
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.onSurface,
+          color:
+              isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurface,
         ),
       ),
       selected: isSelected,
-      selectedTileColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      selectedTileColor: Theme.of(
+        context,
+      ).colorScheme.primaryContainer.withOpacity(0.3),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       onTap: () {
         Navigator.pop(context);
         context.go(route);

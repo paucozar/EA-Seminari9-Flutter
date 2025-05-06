@@ -2,9 +2,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:seminari_flutter/models/user.dart';
 
 class AuthService {
+  static final AuthService _instance = AuthService._internal();
+  factory AuthService() => _instance;
+  AuthService._internal();
+
   bool isLoggedIn = false; // Variable para almacenar el estado de autenticación
+  User? currentUser;
 
   static String get _baseUrl {
     if (kIsWeb) {
@@ -33,7 +39,10 @@ class AuthService {
       print("Resposta rebuda amb codi: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final data = json.decode(response.body);
+        currentUser = User.fromJson(data);
+        isLoggedIn = true; // Cambia el estado de autenticación a autenticado
+        return data;
       } else {
         return {'error': 'email o contrasenya incorrectes'};
       }
@@ -43,8 +52,13 @@ class AuthService {
     }
   }
 
+  User? getCurrentUser() {
+    return currentUser; // Retorna l'usuari actual
+  }
+
   void logout() {
     isLoggedIn = false; // Cambia el estado de autenticación a no autenticado
+    currentUser = null; // Limpia el usuario actual
     print("Sessió tancada");
   }
 }

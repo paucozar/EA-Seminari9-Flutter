@@ -7,6 +7,8 @@ import 'package:seminari_flutter/screens/imprimir_screen.dart';
 import 'package:seminari_flutter/screens/home_screen.dart';
 import 'package:seminari_flutter/screens/perfil_screen.dart';
 import 'package:seminari_flutter/services/auth_service.dart';
+import 'package:seminari_flutter/screens/changepassword_screen.dart';
+import 'package:seminari_flutter/screens/editprofile_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AuthService().isLoggedIn ? '/' : '/login',
@@ -38,6 +40,16 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) => const PerfilScreen(),
+          routes: [
+            GoRoute(
+              path: 'editprofile',
+              builder: (context, state) => const EditProfileScreen(),
+            ),
+            GoRoute(
+              path: 'changepassword',
+              builder: (context, state) => const ChangePasswordScreen(),
+            ),
+          ],
         ),
       ],
     ),

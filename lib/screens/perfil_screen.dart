@@ -8,6 +8,13 @@ class PerfilScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = AuthService();
+    final user = authService.getCurrentUser(); // Assuming this method exists
+
+    if (user == null) {
+      return const Center(child: Text('No s\'ha pogut carregar l\'usuari'));
+    }
+
     return LayoutWrapper(
       title: 'Perfil',
       child: SingleChildScrollView(
@@ -26,14 +33,14 @@ class PerfilScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Exemple',
+                    user.name,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'demo@exemple.com',
+                    user.email,
                     style: Theme.of(
                       context,
                     ).textTheme.titleMedium?.copyWith(color: Colors.grey),
@@ -51,11 +58,9 @@ class PerfilScreen extends StatelessWidget {
                           _buildProfileItem(
                             context,
                             Icons.badge,
-                            'ID',
-                            '67f8f3103368468b6e9d509c',
+                            'Edat',
+                            user.age.toString(),
                           ),
-                          const Divider(),
-                          _buildProfileItem(context, Icons.cake, 'Edat', '22'),
                         ],
                       ),
                     ),
@@ -81,12 +86,18 @@ class PerfilScreen extends StatelessWidget {
                             Icons.edit,
                             'Editar Perfil',
                             'Actualitza la teva informació personal',
+                            onTap: () {
+                              context.go('/profile/editprofile');
+                            },
                           ),
                           _buildSettingItem(
                             context,
                             Icons.lock,
                             'Canviar contrasenya',
                             'Actualitzar la contrasenya',
+                            onTap: () {
+                              context.go('/profile/changepassword');
+                            },
                           ),
                         ],
                       ),
@@ -167,14 +178,15 @@ class PerfilScreen extends StatelessWidget {
     BuildContext context,
     IconData icon,
     String title,
-    String subtitle,
-  ) {
+    String subtitle, {
+    required VoidCallback onTap,
+  }) {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
       title: Text(title),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }
